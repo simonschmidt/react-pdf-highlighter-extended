@@ -17,10 +17,15 @@ import {
 import "./style/App.css";
 import { testHighlights as _testHighlights } from "./test-highlights";
 import { CommentedHighlight } from "./types";
+import rotatedPdfUrl from './rotatedPdf';
 
 const TEST_HIGHLIGHTS = _testHighlights;
-const PRIMARY_PDF_URL = "https://arxiv.org/pdf/2203.11115";
-const SECONDARY_PDF_URL = "https://arxiv.org/pdf/1604.02480";
+const PDF_URLS = [
+  "https://arxiv.org/pdf/2203.11115",
+  "https://arxiv.org/pdf/1604.02480",
+  rotatedPdfUrl,
+];
+const PRIMARY_PDF_URL = rotatedPdfUrl;
 
 const getNextId = () => String(Math.random()).slice(2);
 
@@ -40,7 +45,7 @@ const App = () => {
   const currentPdfIndexRef = useRef(0);
   const [contextMenu, setContextMenu] = useState<ContextMenuProps | null>(null);
   const [pdfScaleValue, setPdfScaleValue] = useState<number | undefined>(
-    undefined,
+    0.25,
   );
   const [highlightPen, setHighlightPen] = useState<boolean>(false);
 
@@ -48,7 +53,7 @@ const App = () => {
   const highlighterUtilsRef = useRef<PdfHighlighterUtils>();
 
   const toggleDocument = () => {
-    const urls = [PRIMARY_PDF_URL, SECONDARY_PDF_URL];
+    const urls = PDF_URLS;
     currentPdfIndexRef.current = (currentPdfIndexRef.current + 1) % urls.length;
     setUrl(urls[currentPdfIndexRef.current]);
     setHighlights(TEST_HIGHLIGHTS[urls[currentPdfIndexRef.current]] ?? []);

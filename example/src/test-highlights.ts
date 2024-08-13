@@ -1,6 +1,38 @@
 import { CommentedHighlight } from "./types";
+import rotatedPdfUrl from "./rotatedPdf";
+
+function simpleHighlight(
+  pageNumber: number, x1: number, x2: number, y1: number, y2: number
+): CommentedHighlight {
+  const rect = {
+    x1,
+    x2,
+    y1,
+    y2,
+    width: 1,
+    height: 1,
+    pageNumber,
+  };
+  return {
+    id: `simple-${pageNumber}-${x1}-${x2}-${y1}-${y2}`,
+    type: "text",
+    content: {
+      text: ""
+    },
+    position: {
+      boundingRect: rect,
+      rects: [rect],
+    },
+  };
+}
 
 export const testHighlights: Record<string, Array<CommentedHighlight>> = {
+  [rotatedPdfUrl]: [
+    simpleHighlight(1, 0.0, 0.25, 0.0, 0.25),
+    simpleHighlight(2, 0.0, 0.25, 0.0, 0.25),
+    simpleHighlight(3, 0.0, 0.25, 0.0, 0.25),
+    simpleHighlight(4, 0.0, 0.25, 0.0, 0.25),
+  ],
   "https://arxiv.org/pdf/2203.11115": [
     {
       content: {
