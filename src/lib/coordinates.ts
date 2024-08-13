@@ -82,11 +82,44 @@ export const scaledToViewport = (
   const x2 = (width * scaled.x2) / scaled.width;
   const y2 = (height * scaled.y2) / scaled.height;
 
+  const rotation = viewport.rotation;
+
+  let rotated;
+  if (rotation === 0) {
+    rotated = {x1, y1, x2, y2};
+
+  } else if (rotation === 90) {
+    rotated = {
+      x1: y1,
+      x2: y2,
+      y1: width - x2,
+      y2: width - x1,
+    };
+
+  } else if (rotation === 180) {
+    rotated = {
+      x1: width - x2,
+      x2: width - x1,
+      y1: height - y2,
+      y2: height - y1,
+    };
+
+  } else if (rotation === 270) {
+    rotated = {
+      x1: height - y2,
+      x2: height - y1,
+      y1: x1,
+      y2: x2,
+    };
+
+  } else {
+    throw new Error(`Unsupported rotation: ${rotation}`);
+  }
   return {
-    left: x1,
-    top: y1,
-    width: x2 - x1,
-    height: y2 - y1,
+    left: rotated.x1,
+    top: rotated.y1,
+    width: rotated.x2 - rotated.x1,
+    height: rotated.y2 - rotated.y1,
     pageNumber: scaled.pageNumber,
   };
 };
