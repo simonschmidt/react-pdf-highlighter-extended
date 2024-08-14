@@ -75,11 +75,16 @@ export const findOrCreateContainerLayer = (
   container: HTMLElement,
   className: string,
 ) => {
+  // Ensure container is not hidden
+  // TODO: Figure out why it would be
+  container.hidden = false;
+
   const doc = getDocument(container);
   let layer = container.querySelector(`.${className}`);
 
   // To ensure predictable zIndexing, wait until the pdfjs element has children.
-  if (!layer && container.children.length) {
+  // if (!layer && container.children.length) {
+  if (!layer) {
     layer = doc.createElement("div");
     layer.className = className;
     container.appendChild(layer);
