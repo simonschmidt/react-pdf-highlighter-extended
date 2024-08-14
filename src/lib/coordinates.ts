@@ -2,28 +2,62 @@ import { PDFViewer } from "pdfjs-dist/types/web/pdf_viewer";
 import type { LTWHP, ViewportPosition, Scaled, ScaledPosition } from "../types";
 import { PageViewport } from "pdfjs-dist";
 
-interface WIDTH_HEIGHT {
-  width: number;
-  height: number;
-}
 
 /** @category Utilities */
 export const viewportToScaled = (
   rect: LTWHP,
-  { width, height }: WIDTH_HEIGHT,
+  viewport: PageViewport
 ): Scaled => {
-  return {
-    x1: rect.left,
-    y1: rect.top,
 
-    x2: rect.left + rect.width,
-    y2: rect.top + rect.height,
+  const {width, height, rotation} = viewport;
 
-    width,
-    height,
+  if (rotation === 0) {
+    return {
+      x1: rect.left,
+      y1: rect.top,
+      x2: rect.left + rect.width,
+      y2: rect.top + rect.height,
+      width,
+      height,
+      pageNumber: rect.pageNumber,
+    };
+  }
+  if (rotation === 90) {
+    return {
+      x1: width - rect.height - rect.top,
+      x2: width - rect.top,
+      y1: rect.left,
+      y2: rect.left + rect.width,
+      width,
+      height,
+      pageNumber: rect.pageNumber,
+    };
+  }
+  if (rotation === 180) {
+    return  {
+      x1: width - rect.left - rect.width,
+      x2: width - rect.left,
+      y1: height - rect.top - rect.height,
+      y2: height - rect.top,
+      width,
+      height,
+      pageNumber: rect.pageNumber,
+    };
+  }
 
-    pageNumber: rect.pageNumber,
-  };
+  if (rotation === 270) {
+    return {
+      x1: rect.top,
+      x2: rect.top + rect.height,
+      y1: height - rect.left - rect.width,
+      y2: height - rect.left,
+      width,
+      height,
+      pageNumber: rect.pageNumber,
+    };
+  }
+
+  throw new Error(`Unsupported page rotation: ${rotation}`)
 };
 
 /** @category Utilities */
