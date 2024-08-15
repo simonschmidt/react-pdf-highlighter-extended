@@ -397,7 +397,7 @@ export const PdfHighlighter = ({
       if (highlightBindings?.container?.isConnected) {
         renderHighlightLayer(highlightBindings, pageNumber);
       } else {
-        const { annotationLayer: textLayer } =
+        const { textLayer } =
           viewerRef.current!.getPageView(pageNumber - 1) || {};
         if (!textLayer) continue; // Viewer hasn't rendered page yet
         if (!textLayer.div) continue;
